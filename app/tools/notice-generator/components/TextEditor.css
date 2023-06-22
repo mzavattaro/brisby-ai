@@ -1,0 +1,92 @@
+.editor-input {
+  position: relative;
+  min-height: 150px;
+  padding: 15px 10px;
+  caret-color: rgb(5 5 5);
+  caret-color: #444;
+  font-size: 15px;
+  outline: 0;
+  resize: none;
+  tab-size: 1;
+}
+
+.editor-placeholder {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+  display: inline-block;
+  overflow: hidden;
+  color: #999;
+  font-size: 15px;
+  pointer-events: none;
+  text-overflow: ellipsis;
+  user-select: none;
+}
+
+.editor-paragraph {
+  position: relative;
+  margin: 0 0 15px;
+}
+
+.tree-view-output {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  max-height: 250px;
+  padding: 5px;
+  margin: 1px auto 10px;
+  background: #001f3f;
+  color: #fff;
+  font-size: 12px;
+  line-height: 14px;
+  white-space: pre-wrap;
+}
+
+pre::-webkit-scrollbar {
+  width: 10px;
+  background: transparent;
+}
+
+pre::-webkit-scrollbar-thumb {
+  background: #999;
+}
+
+.debug-timetravel-panel {
+  display: flex;
+  overflow: hidden;
+  padding: 0 0 10px;
+  margin: auto;
+}
+
+.debug-timetravel-panel-slider {
+  flex: 8;
+  padding: 0;
+}
+
+.debug-timetravel-panel-button {
+  flex: 1;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 12px;
+}
+
+.debug-timetravel-panel-button:hover {
+  text-decoration: underline;
+}
+
+.debug-timetravel-button {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 12px;
+}
+
+.debug-timetravel-button:hover {
+  text-decoration: underline;
+}

@@ -6,12 +6,20 @@ type ButtonProps = {
   variant: 'primary' | 'secondary' | 'tertiary';
   children: string;
   disabled?: boolean;
+  onClick?: () => void;
 };
 
-const Button: FC<ButtonProps> = ({ children, type, variant, disabled }) => (
+const Button: FC<ButtonProps> = ({
+  children,
+  type,
+  variant,
+  disabled,
+  onClick,
+}) => (
   <button
     // eslint-disable-next-line react/button-has-type
     type={type}
+    onClick={onClick}
     disabled={disabled}
     className={clsx(
       'w-fit rounded-md px-3.5 py-2.5 text-sm font-semibold shadow-sm focus-visible:outline-2 focus-visible:outline-offset-2',

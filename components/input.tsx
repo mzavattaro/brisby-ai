@@ -1,8 +1,9 @@
 import { clsx } from '@/lib/clsx';
-import type { FC } from 'react';
+import type { FC, RefObject } from 'react';
 
 type InputProps = {
   ariaLabel: string;
+  forwardRef: RefObject<HTMLInputElement>;
   type: string;
   name: string;
   id: string;
@@ -13,6 +14,7 @@ type InputProps = {
 
 const Input: FC<InputProps> = ({
   ariaLabel,
+  forwardRef,
   type,
   name,
   id,
@@ -33,6 +35,7 @@ const Input: FC<InputProps> = ({
 
     <input
       aria-label={ariaLabel}
+      ref={forwardRef}
       type={type}
       name={name}
       id={id}

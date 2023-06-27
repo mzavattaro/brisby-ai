@@ -1,6 +1,6 @@
 import Main from '@/app/tools/components/main';
-import Heading from '@/components/heading';
 import Aside from '../components/aside';
+import SidebarContainer from '../components/sidebarContainer';
 import GenerationForm from './components/generationForm';
 import type { NextPage } from 'next';
 
@@ -11,7 +11,7 @@ const Page: NextPage = () => (
     </Main>
 
     <Aside>
-      <Heading tag="h4">Refinement</Heading>
+      <SidebarContainer />
     </Aside>
   </>
 );

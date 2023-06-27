@@ -1,12 +1,13 @@
+import Link from 'next/link';
+import { UserButton } from '@clerk/nextjs';
 import { clsx } from '@/lib/clsx';
 import Heading from '@/components/heading';
-import DropdownMenu from '@/components/dropdownMenu';
 import type { RouteProps, NavigationProps } from './navigation';
 import type { FC } from 'react';
 
-export type SidebarProps = NavigationProps & RouteProps;
+export type DesktopNavigationProps = NavigationProps & RouteProps;
 
-const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
+const DesktopNavigation: FC<DesktopNavigationProps> = ({ navigation }) => (
   <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-60 lg:flex-col bg-gray-50">
     <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-slate-50 px-6">
       <div className="flex h-16 shrink-0 items-center flex-row">
@@ -18,7 +19,7 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
             <ul className="-mx-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name}>
-                  <a
+                  <Link
                     href={item.href}
                     className={clsx(
                       item.current
@@ -37,7 +38,7 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -45,10 +46,15 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
 
           <li className="-mx-6 mt-auto">
             <div className="gap-x-2 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50">
-              <DropdownMenu
-                dropdownPlacement="top"
-                fullName={fullName}
-                displayName
+              <UserButton
+                showName
+                appearance={{
+                  elements: {
+                    userButtonBox: 'flex-row-reverse',
+                    userButtonTrigger: 'rounded',
+                    avatarBox: 'rounded',
+                  },
+                }}
               />
               <span className="sr-only">Your profile</span>
             </div>
@@ -59,4 +65,4 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
   </div>
 );
 
-export default Sidebar;
+export default DesktopNavigation;

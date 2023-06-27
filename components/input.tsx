@@ -1,15 +1,17 @@
 import { clsx } from '@/lib/clsx';
-import type { FC, RefObject } from 'react';
+import type { FC, RefObject, ChangeEvent } from 'react';
 
 type InputProps = {
   ariaLabel: string;
-  forwardRef: RefObject<HTMLInputElement>;
+  forwardRef?: RefObject<HTMLInputElement>;
   type: string;
   name: string;
   id: string;
   placeholder?: string;
   showLabel: boolean;
   className?: string;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Input: FC<InputProps> = ({
@@ -21,6 +23,8 @@ const Input: FC<InputProps> = ({
   placeholder,
   showLabel,
   className,
+  value,
+  onChange,
 }) => (
   <>
     <label
@@ -44,6 +48,8 @@ const Input: FC<InputProps> = ({
         className
       )}
       placeholder={placeholder}
+      value={value}
+      onChange={onChange}
     />
   </>
 );

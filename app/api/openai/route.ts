@@ -1,40 +1,35 @@
-import openAIStream from '@/lib/openAIStreaming';
-import type { OpenAIStreamPayload } from '@/lib/openAIStreaming';
-import type { NextApiHandler } from 'next';
+import { Configuration, OpenAIApi } from 'openai-edge';
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 
-type RequestData = {
-  currentModel: string;
-  message: string;
+type Messages = {
+  messages: {
+    role: string;
+    content: string;
+  }[];
 };
 
-if (!process.env.OPENAI_API_KEY) {
-  throw new Error('Missing env var from OpenAI');
-}
+// Create an OpenAI API client (that's edge friendly!)
+const config = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(config);
 
+// IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
-const handler: NextApiHandler = async (request) => {
-  const { message } = (await request.json()) as RequestData;
+// eslint-disable-next-line func-style
+export async function POST(req: Request): Promise<StreamingTextResponse> {
+  // Extract the `messages` from the body of the request
+  const { messages } = (await req.json()) as Messages;
 
-  if (!message) {
-    return new Response('No message in the request', { status: 400 });
-  }
-
-  const payload: OpenAIStreamPayload = {
+  // Ask OpenAI for a streaming chat completion given the prompt
+  const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: message }],
-    temperature: 0.7,
-    top_p: 1,
-    frequency_penalty: 0,
-    presence_penalty: 0,
-    max_tokens: 2048,
     stream: true,
-    // eslint-disable-next-line id-length
-    n: 1,
-  };
-
-  const stream = await openAIStream(payload);
-  return new Response(stream);
-};
-
-export default handler;
+    messages,
+  });
+  // Convert the response into a friendly text-stream
+  const stream = OpenAIStream(response);
+  // Respond with the stream
+  return new StreamingTextResponse(stream);
+}

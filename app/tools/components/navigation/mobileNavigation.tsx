@@ -2,15 +2,15 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { UserButton } from '@clerk/nextjs';
 import { clsx } from '@/lib/clsx';
 import Heading from '@/components/heading';
-import DropdownMenu from '@/components/dropdownMenu';
 import type { RouteProps, NavigationProps } from './navigation';
 import type { FC } from 'react';
 
-type NavbarProps = NavigationProps & RouteProps;
+type MobileNavigationProps = NavigationProps & RouteProps;
 
-const Navbar: FC<NavbarProps> = ({ navigation, fullName }) => {
+const MobileNavigation: FC<MobileNavigationProps> = ({ navigation }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -106,12 +106,15 @@ const Navbar: FC<NavbarProps> = ({ navigation, fullName }) => {
                       </li>
                       <li className="-mx-6 mt-auto">
                         <div className="gap-x-2 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50">
-                          <DropdownMenu
-                            dropdownPlacement="top"
-                            fullName={fullName}
-                            displayName
-                            setSidebarOpen={setSidebarOpen}
-                            sidebarOpen={sidebarOpen}
+                          <UserButton
+                            showName
+                            appearance={{
+                              elements: {
+                                userButtonBox: 'flex-row-reverse',
+                                userButtonTrigger: 'rounded',
+                                avatarBox: 'rounded',
+                              },
+                            }}
                           />
                           <span className="sr-only">Your profile</span>
                         </div>
@@ -148,14 +151,18 @@ const Navbar: FC<NavbarProps> = ({ navigation, fullName }) => {
         </div>
 
         <span className="sr-only">Your profile</span>
-        <DropdownMenu
-          dropdownPlacement="bottom"
-          fullName={fullName}
-          displayName={false}
+        <UserButton
+          appearance={{
+            elements: {
+              userButtonBox: 'flex-row-reverse',
+              userButtonTrigger: 'rounded',
+              avatarBox: 'rounded',
+            },
+          }}
         />
       </div>
     </>
   );
 };
 
-export default Navbar;
+export default MobileNavigation;

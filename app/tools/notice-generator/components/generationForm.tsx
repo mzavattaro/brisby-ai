@@ -36,10 +36,10 @@ const GeneratorForm: FC = () => {
         </form>
       </div>
 
-      {messages.map((m) => (
-        <div key={m.id}>
-          {m.role === 'user' ? 'User: ' : 'AI: '}
-          {m.content}
+      {messages.map((message) => (
+        <div key={message.id}>
+          {message.role === 'user' ? 'User: ' : 'AI: '}
+          {message.content}
         </div>
       ))}
 

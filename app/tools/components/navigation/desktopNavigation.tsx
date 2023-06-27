@@ -2,13 +2,12 @@ import Link from 'next/link';
 import { UserButton } from '@clerk/nextjs';
 import { clsx } from '@/lib/clsx';
 import Heading from '@/components/heading';
-import DropdownMenu from '@/components/dropdownMenu';
 import type { RouteProps, NavigationProps } from './navigation';
 import type { FC } from 'react';
 
-export type SidebarProps = NavigationProps & RouteProps;
+export type DesktopNavigationProps = NavigationProps & RouteProps;
 
-const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
+const DesktopNavigation: FC<DesktopNavigationProps> = ({ navigation }) => (
   <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-60 lg:flex-col bg-gray-50">
     <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-slate-50 px-6">
       <div className="flex h-16 shrink-0 items-center flex-row">
@@ -66,4 +65,4 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
   </div>
 );
 
-export default Sidebar;
+export default DesktopNavigation;

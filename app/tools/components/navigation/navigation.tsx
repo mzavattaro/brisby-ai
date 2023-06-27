@@ -7,8 +7,8 @@ import {
   DocumentCheckIcon,
   ChatBubbleOvalLeftEllipsisIcon,
 } from '@heroicons/react/24/outline';
-import Sidebar from './sidebar';
-import Navbar from './navbar';
+import DesktopNavigation from './desktopNavigation';
+import MobileNavigation from './mobileNavigation';
 import type {
   FC,
   ForwardRefExoticComponent,
@@ -67,8 +67,8 @@ const Navigation: FC<NavigationProps> = ({ fullName }) => {
 
   return (
     <>
-      <Navbar navigation={navigation} fullName={fullName} />
-      <Sidebar navigation={navigation} fullName={fullName} />
+      <MobileNavigation navigation={navigation} fullName={fullName} />
+      <DesktopNavigation navigation={navigation} fullName={fullName} />
     </>
   );
 };

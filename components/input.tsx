@@ -3,7 +3,7 @@ import type { FC, RefObject, ChangeEvent } from 'react';
 
 type InputProps = {
   ariaLabel: string;
-  forwardRef: RefObject<HTMLInputElement>;
+  forwardRef?: RefObject<HTMLInputElement>;
   type: string;
   name: string;
   id: string;

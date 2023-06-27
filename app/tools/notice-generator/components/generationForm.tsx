@@ -7,41 +7,40 @@ import TextEditorOutput from './textEditorOutput';
 import type { FC, FormEvent } from 'react';
 
 const GeneratorForm: FC = () => {
-  const messageInput = useRef<HTMLInputElement | null>(null);
+  const queryInput = useRef<HTMLInputElement>(null);
   const [storedResponse, setStoredResponse] = useState<string[]>([]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const message = messageInput.current?.value;
-    console.log('Sending message to edge function: ', message);
+    const query = queryInput.current?.value;
+    console.log('Sending message to edge function: ', query);
 
-    if (message !== undefined) {
-      setStoredResponse((prev) => [...prev, message]);
-      if (messageInput.current !== null) {
-        messageInput.current.value = '';
+    if (query !== undefined) {
+      setStoredResponse((prev) => [...prev, query]);
+      if (queryInput.current !== null) {
+        queryInput.current.value = '';
       }
     }
 
-    if (!message) {
+    if (!query) {
+      console.log('No query provided.');
       return;
     }
 
     const response = await fetch('/api/openai', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message,
+        query,
       }),
     });
 
     console.log('Edge function returned.');
-    console.log(response);
+    console.log('response: ', response);
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      console.log(response.statusText);
     }
 
     const data = response.body;
@@ -52,7 +51,7 @@ const GeneratorForm: FC = () => {
     const reader = data.getReader();
     const decoder = new TextDecoder();
 
-    setStoredResponse((prev) => [...prev, message]);
+    setStoredResponse((prev) => [...prev, query]);
 
     let currentResponse: string[] = [];
     const readStream = async () => {
@@ -79,7 +78,7 @@ const GeneratorForm: FC = () => {
       <div className="px-4 border-b">
         <form className="flex h-10 mb-4 items-center" onSubmit={handleSubmit}>
           <Input
-            forwardRef={messageInput}
+            forwardRef={queryInput}
             ariaLabel="Generate notice"
             type="text"
             name="text"
@@ -94,7 +93,13 @@ const GeneratorForm: FC = () => {
         </form>
       </div>
 
-      <TextEditorOutput />
+      {storedResponse.map((response, index) => (
+        <div key={index}>
+          <p>{response}</p>
+        </div>
+      ))}
+
+      {/* <TextEditorOutput /> */}
     </>
   );
 };

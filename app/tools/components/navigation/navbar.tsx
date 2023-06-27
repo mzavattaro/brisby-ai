@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, Bars3Icon } from '@heroicons/react/24/outline';
+import Link from 'next/link';
 import { clsx } from '@/lib/clsx';
 import Heading from '@/components/heading';
 import DropdownMenu from '@/components/dropdownMenu';
@@ -78,7 +79,7 @@ const Navbar: FC<NavbarProps> = ({ navigation, fullName }) => {
                         <ul className="-mx-2 space-y-1">
                           {navigation.map((item) => (
                             <li key={item.name}>
-                              <a
+                              <Link
                                 onClick={() => setSidebarOpen(false)}
                                 href={item.href}
                                 className={clsx(
@@ -98,7 +99,7 @@ const Navbar: FC<NavbarProps> = ({ navigation, fullName }) => {
                                   aria-hidden="true"
                                 />
                                 {item.name}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>

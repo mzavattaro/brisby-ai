@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { UserButton } from '@clerk/nextjs';
 import { clsx } from '@/lib/clsx';
 import Heading from '@/components/heading';
 import DropdownMenu from '@/components/dropdownMenu';
@@ -18,7 +20,7 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
             <ul className="-mx-2 space-y-1">
               {navigation.map((item) => (
                 <li key={item.name}>
-                  <a
+                  <Link
                     href={item.href}
                     className={clsx(
                       item.current
@@ -37,7 +39,7 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -45,10 +47,15 @@ const Sidebar: FC<SidebarProps> = ({ navigation, fullName }) => (
 
           <li className="-mx-6 mt-auto">
             <div className="gap-x-2 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50">
-              <DropdownMenu
-                dropdownPlacement="top"
-                fullName={fullName}
-                displayName
+              <UserButton
+                showName
+                appearance={{
+                  elements: {
+                    userButtonBox: 'flex-row-reverse',
+                    userButtonTrigger: 'rounded',
+                    avatarBox: 'rounded',
+                  },
+                }}
               />
               <span className="sr-only">Your profile</span>
             </div>

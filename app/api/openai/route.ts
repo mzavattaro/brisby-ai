@@ -1,5 +1,7 @@
 import { Configuration, OpenAIApi } from 'openai-edge';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { kv } from '@vercel/kv';
+import { Ratelimit } from '@upstash/ratelimit';
 
 type Messages = {
   messages: {
@@ -18,7 +20,7 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 // eslint-disable-next-line func-style
-export async function POST(req: Request): Promise<StreamingTextResponse> {
+export async function POST(req: Request): Promise<Response> {
   // Extract the `messages` from the body of the request
   const { messages } = (await req.json()) as Messages;
 

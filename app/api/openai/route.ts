@@ -20,7 +20,7 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 // eslint-disable-next-line func-style
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: Request): Promise<StreamingTextResponse> {
   if (
     process.env.NODE_ENV !== 'development' &&
     process.env.KV_REST_API_URL &&
@@ -54,7 +54,6 @@ export async function POST(req: Request): Promise<Response> {
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
-    stream: true,
     messages: [
       {
         role: 'system',
@@ -67,9 +66,16 @@ export async function POST(req: Request): Promise<Response> {
         content: messages.map((message) => message.content).join('\n'),
       },
     ],
+    temperature: 0.7,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+    stream: true,
+    // eslint-disable-next-line id-length
+    n: 1,
   });
-  // Convert the response into a friendly text-stream
 
+  // Convert the response into a friendly text-stream
   // eslint-disable-next-line new-cap
   const stream = OpenAIStream(response);
   // Respond with the stream

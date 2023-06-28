@@ -1,6 +1,7 @@
 'use client';
 
 import { useChat } from 'ai/react';
+import { toast } from 'sonner';
 import Input from '@/components/input';
 import Button from '@/components/button';
 import TextEditorOutput from './textEditorOutput';
@@ -10,6 +11,7 @@ const GeneratorForm: FC = () => {
   const { messages, input, stop, isLoading, handleInputChange, handleSubmit } =
     useChat({
       api: '/api/openai',
+      onFinish: () => toast.success('Finished!'),
     });
 
   return (

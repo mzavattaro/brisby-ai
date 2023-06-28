@@ -21,6 +21,33 @@ export const runtime = 'edge';
 
 // eslint-disable-next-line func-style
 export async function POST(req: Request): Promise<Response> {
+  if (
+    process.env.NODE_ENV !== 'development' &&
+    process.env.KV_REST_API_URL &&
+    process.env.KV_REST_API_TOKEN
+  ) {
+    const ip = req.headers.get('x-forwarded-for');
+    const ratelimit = new Ratelimit({
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(10, '1 d'),
+    });
+
+    const { success, limit, reset, remaining } = await ratelimit.limit(
+      `brisbyAI_ratelimit_${ip ?? ''}`
+    );
+
+    if (!success) {
+      return new Response('You have reached the monthly limit for your plan.', {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
+        },
+      });
+    }
+  }
+
   // Extract the `messages` from the body of the request
   const { messages } = (await req.json()) as Messages;
 

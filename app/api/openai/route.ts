@@ -26,9 +26,22 @@ export async function POST(req: Request): Promise<StreamingTextResponse> {
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     stream: true,
-    messages,
+    messages: [
+      {
+        role: 'system',
+        content:
+          'You are an AI writing assistant that continues existing text based on context from prior text. ' +
+          'Give more weight/priority to the later characters than the beginning ones. Make sure to construct complete sentences.',
+      },
+      {
+        role: 'user',
+        content: messages.map((message) => message.content).join('\n'),
+      },
+    ],
   });
   // Convert the response into a friendly text-stream
+
+  // eslint-disable-next-line new-cap
   const stream = OpenAIStream(response);
   // Respond with the stream
   return new StreamingTextResponse(stream);

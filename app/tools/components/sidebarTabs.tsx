@@ -14,7 +14,6 @@ const SidebarTabs: FC<SidebarTabsProps> = ({ currentTab, setCurrentTab }) => {
   ];
 
   const handlesSetCurrentTab = (tab: string) => {
-    // Set the sidebar tab.
     setCurrentTab(tab);
   };
 

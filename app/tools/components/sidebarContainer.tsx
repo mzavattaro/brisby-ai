@@ -9,7 +9,7 @@ const SidebarContainer: FC = () => {
   const [currentTab, setCurrentTab] = useState('Refinement');
 
   return (
-    <div>
+    <div className="w-full h-full bg-red-200">
       <div className="px-3">
         <SidebarTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
       </div>

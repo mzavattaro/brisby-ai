@@ -1,5 +1,9 @@
 import type { FC } from 'react';
 
-const Refinement: FC = () => <div>Refinement tools</div>;
+const Refinement: FC = () => (
+  <div>
+    <div>Temperature</div>
+  </div>
+);
 
 export default Refinement;

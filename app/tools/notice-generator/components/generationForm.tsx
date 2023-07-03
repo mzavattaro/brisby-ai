@@ -12,6 +12,9 @@ const GeneratorForm: FC = () => {
     useChat({
       api: '/api/openai',
       onFinish: () => toast.success('Finished!'),
+      body: {
+        userTemperature: 0.9,
+      },
     });
 
   return (

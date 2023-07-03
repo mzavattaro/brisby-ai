@@ -3,13 +3,14 @@ import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { kv } from '@vercel/kv';
 import { Ratelimit } from '@upstash/ratelimit';
 
-type OpenAIBody = {
-  messages: {
-    role: string;
-    content: string;
-  }[];
-  userTemperature: number;
-};
+/*
+ * type Messages = {
+ *   messages: {
+ *     role: string;
+ *     content: string;
+ *   }[];
+ * };
+ */
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -21,7 +22,7 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 // eslint-disable-next-line func-style
-export async function POST(req: Request): Promise<StreamingTextResponse> {
+export async function POST(req: Request): Promise<Response> {
   if (
     process.env.NODE_ENV !== 'development' &&
     process.env.KV_REST_API_URL &&
@@ -30,15 +31,15 @@ export async function POST(req: Request): Promise<StreamingTextResponse> {
     const ip = req.headers.get('x-forwarded-for');
     const ratelimit = new Ratelimit({
       redis: kv,
-      limiter: Ratelimit.slidingWindow(10, '1 d'),
+      limiter: Ratelimit.slidingWindow(50, '1 d'),
     });
 
     const { success, limit, reset, remaining } = await ratelimit.limit(
-      `brisbyAI_ratelimit_${ip ?? ''}`
+      `novel_ratelimit_${ip ?? ''}`
     );
 
     if (!success) {
-      return new Response('You have reached the monthly limit for your plan.', {
+      return new Response('You have reached your request limit for the day.', {
         status: 429,
         headers: {
           'X-RateLimit-Limit': limit.toString(),
@@ -49,8 +50,26 @@ export async function POST(req: Request): Promise<StreamingTextResponse> {
     }
   }
 
-  // Extract the `messages` from the body of the request
-  const { messages, userTemperature } = (await req.json()) as OpenAIBody;
+  let { prompt: content } = (await req.json()) as {
+    prompt: string;
+  };
+
+  /*
+   * const { temperature } = (await req.json()) as {
+   *   temperature: number;
+   * };
+   */
+
+  /*
+   * remove trailing slash,
+   * slice the content from the end to prioritize later characters
+   */
+  content = content.replace(/\/$/u, '').slice(-5000);
+
+  /*
+   * Extract the `messages` from the body of the request
+   * const { messages } = (await req.json()) as Messages;
+   */
 
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.createChatCompletion({
@@ -64,10 +83,11 @@ export async function POST(req: Request): Promise<StreamingTextResponse> {
       },
       {
         role: 'user',
-        content: messages.map((message) => message.content).join('\n'),
+        content,
+        // content: messages.map((message) => message.content).join('\n'),
       },
     ],
-    temperature: userTemperature,
+    temperature: 0,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,

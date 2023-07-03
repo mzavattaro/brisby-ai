@@ -6,8 +6,8 @@ type RangeSliderProps = {
   max: string;
   defaultValue: string;
   step: string;
-  rangeValue: string;
-  setRangeValue: (value: string) => void;
+  rangeValue: number;
+  setRangeValue: (value: number) => void;
 };
 
 const RangeSlider: FC<RangeSliderProps> = ({
@@ -19,7 +19,7 @@ const RangeSlider: FC<RangeSliderProps> = ({
   setRangeValue,
 }) => {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setRangeValue(event.target.value);
+    setRangeValue(event.target.valueAsNumber);
   };
 
   return (

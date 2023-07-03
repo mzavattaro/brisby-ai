@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/nextjs": "^4.21.13",
     "@clerk/themes": "^1.7.5",
+    "@emotion/react": "^11.11.1",
     "@headlessui/react": "^1.7.15",
     "@heroicons/react": "^2.0.18",
     "@lexical/react": "^0.11.1",
@@ -20,11 +21,14 @@
     "@types/react-dom": "18.2.5",
     "@upstash/ratelimit": "^0.4.3",
     "@vercel/kv": "^0.2.2",
-    "ai": "^2.1.13",
+    "ai": "2.1.12",
     "autoprefixer": "10.4.14",
     "eslint-config-next": "13.4.6",
     "eventsource-parser": "^1.0.0",
     "framer-motion": "^10.12.18",
+    "jotai": "^2.2.1",
+    "jotai-cache": "^0.3.0",
+    "jotai-devtools": "^0.6.0",
     "lexical": "^0.11.1",
     "next": "13.4.6",
     "openai": "^3.3.0",
@@ -37,8 +41,7 @@
     "tailwind-merge": "^1.13.2",
     "tailwindcss": "3.3.2",
     "tailwindcss-animate": "^1.0.6",
-    "zod": "^3.21.4",
-    "zustand": "^4.3.8"
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@beskar-labs/harmony": "^2.4.4",

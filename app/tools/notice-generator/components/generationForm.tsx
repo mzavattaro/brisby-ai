@@ -11,9 +11,9 @@ const GeneratorForm: FC = () => {
   const { messages, input, stop, isLoading, handleInputChange, handleSubmit } =
     useChat({
       api: '/api/openai',
-      onFinish: () => toast.success('Finished!'),
+      onFinish: () => toast.success('Your AI generated notice is ready!'),
       body: {
-        userTemperature: 0.9,
+        temperature: 0.7,
       },
     });
 

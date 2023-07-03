@@ -5,7 +5,7 @@ import RangerSlider from '@/components/rangeSlider';
 import type { FC } from 'react';
 
 const Refinement: FC = () => {
-  const [rangeValue, setRangeValue] = useState('0');
+  const [rangeValue, setRangeValue] = useState(0);
 
   return (
     <>

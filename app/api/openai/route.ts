@@ -3,15 +3,6 @@ import { OpenAIStream, StreamingTextResponse } from 'ai';
 import { kv } from '@vercel/kv';
 import { Ratelimit } from '@upstash/ratelimit';
 
-/*
- * type Messages = {
- *   messages: {
- *     role: string;
- *     content: string;
- *   }[];
- * };
- */
-
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -55,21 +46,10 @@ export async function POST(req: Request): Promise<Response> {
   };
 
   /*
-   * const { temperature } = (await req.json()) as {
-   *   temperature: number;
-   * };
-   */
-
-  /*
    * remove trailing slash,
    * slice the content from the end to prioritize later characters
    */
   content = content.replace(/\/$/u, '').slice(-5000);
-
-  /*
-   * Extract the `messages` from the body of the request
-   * const { messages } = (await req.json()) as Messages;
-   */
 
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.createChatCompletion({
@@ -84,7 +64,6 @@ export async function POST(req: Request): Promise<Response> {
       {
         role: 'user',
         content,
-        // content: messages.map((message) => message.content).join('\n'),
       },
     ],
     temperature: 0,

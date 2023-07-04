@@ -1,4 +1,5 @@
 import Main from '@/app/tools/components/main';
+import Editor from '@/components/editor';
 import Aside from '../components/aside';
 import SidebarContainer from '../components/sidebarContainer';
 import GenerationForm from './components/generationForm';
@@ -7,7 +8,7 @@ import type { NextPage } from 'next';
 const Page: NextPage = () => (
   <>
     <Main>
-      <GenerationForm />
+      <Editor />
     </Main>
 
     <Aside>

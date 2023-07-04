@@ -1,0 +1,88 @@
+.ProseMirror .is-editor-empty:first-child::before {
+  height: 0;
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  pointer-events: none;
+}
+
+.ProseMirror .is-empty::before {
+  height: 0;
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  pointer-events: none;
+}
+
+/* Custom image styles */
+
+.ProseMirror img {
+  transition: filter 0.1s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(90%);
+  }
+
+  &.ProseMirror-selectednode {
+    filter: brightness(90%);
+    outline: 3px solid #5abbf7;
+  }
+}
+
+/* Custom TODO list checkboxes – shoutout to this awesome tutorial: https://moderncss.dev/pure-css-custom-checkbox-style/ */
+
+ul[data-type='taskList'] li > label {
+  margin-right: 0.2rem;
+  user-select: none;
+}
+
+@media screen and (width <= 768px) {
+  ul[data-type='taskList'] li > label {
+    margin-right: 0.5rem;
+  }
+}
+
+ul[data-type='taskList'] li > label input[type='checkbox'] {
+  position: relative;
+  top: 5px;
+  display: grid;
+  width: 1.2em;
+  height: 1.2em;
+  border: 2px solid black;
+  margin: 0;
+  margin-right: 0.3rem;
+  appearance: none;
+  background-color: #fff;
+  cursor: pointer;
+  place-content: center;
+
+  &:hover {
+    background-color: #f8f9fa;
+  }
+
+  &:active {
+    background-color: #e9ecef;
+  }
+
+  &::before {
+    width: 0.65em;
+    height: 0.65em;
+    box-shadow: inset 1em 1em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    content: '';
+    transform: scale(0);
+    transform-origin: center;
+    transition: 120ms transform ease-in-out;
+  }
+
+  &:checked::before {
+    transform: scale(1);
+  }
+}
+
+ul[data-type='taskList'] li[data-checked='true'] > div > p {
+  color: #a8a29e;
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+}

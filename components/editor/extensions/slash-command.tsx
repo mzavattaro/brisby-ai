@@ -273,6 +273,7 @@ const CommandList = ({
         from: range.from,
         to: range.from + completion.length,
       });
+      toast.success('AI generation is complete!');
     },
     onError: () => {
       toast.error('Something went wrong.');

@@ -80,6 +80,7 @@ const Editor: FC = () => {
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
       });
+      toast.success('AI generation is complete!');
     },
     onError: () => {
       toast.error('Something went wrong.');

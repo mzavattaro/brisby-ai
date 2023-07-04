@@ -104,9 +104,11 @@ const Refinement: FC = () => {
         </Select>
       </div>
 
-      <div className="-mx-8 border-b border-b-slate-200 mt-6 mb-4" />
+      <div className="-mx-8 border-b border-b-slate-200 mt-6 mb-5" />
 
-      <Heading tag="h6">Advanced settings</Heading>
+      <Heading tag="h6" className="mb-3">
+        Advanced settings
+      </Heading>
       {/* Tempature slider */}
       <div className="mb-6">
         <div className="flex items-center place-content-between mb-2">

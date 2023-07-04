@@ -5,7 +5,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { useCompletion } from 'ai/react';
 import { toast } from 'sonner';
-// import va from '@vercel/analytics';
+import va from '@vercel/analytics';
 import useLocalStorage from '@/lib/hooks/use-local-storage';
 import { TiptapExtensions } from './extensions';
 import { TiptapEditorProps } from './props';
@@ -51,10 +51,9 @@ const Editor: FC = () => {
         });
         // we're using this for now until we can figure out a way to stream markdown text with proper formatting: https://github.com/steven-tey/novel/discussions/7
         await complete(event.editor.getText());
-        /*
-         * complete(event.editor.storage.markdown.getMarkdown());
-         * va.track('Autocomplete Shortcut Used');
-         */
+
+        // complete(event.editor.storage.markdown.getMarkdown());
+        va.track('Autocomplete Shortcut Used');
       } else {
         await debouncedUpdates(event);
       }
@@ -73,7 +72,7 @@ const Editor: FC = () => {
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error('You have reached your request limit for the day.');
-        // va.track('Rate Limit Reached');
+        va.track('Rate Limit Reached');
       }
     },
     onFinish: (prompt, completion) => {
@@ -127,7 +126,7 @@ const Editor: FC = () => {
           duration: Infinity,
         })
       ) {
-        // va.track('User Paused AI');
+        va.track('User Paused AI');
         console.log('User wants to continue');
       }
     };

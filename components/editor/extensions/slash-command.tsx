@@ -262,7 +262,7 @@ const CommandList = ({
       if (response.status === 429) {
         toast.error('You have reached your request limit for the day.');
         console.log("You've reached your request limit for the day.");
-        // va.track('Rate Limit Reached');
+        va.track('Rate Limit Reached');
         return;
       }
       editor.chain().focus().deleteRange(range).run();

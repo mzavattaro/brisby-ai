@@ -7,7 +7,7 @@ type MainProps = {
 };
 
 const Main: FC<MainProps> = ({ children, className }) => (
-  <main className={clsx('lg:pl-60 xl:pr-96 py-10 lg:py-6', className)}>
+  <main className={clsx('lg:pl-60 xl:pr-96 h-full', className)}>
     {children}
   </main>
 );

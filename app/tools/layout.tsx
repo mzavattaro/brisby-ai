@@ -9,7 +9,7 @@ const ToolsLayout: FC<{ children: ReactNode }> = async ({ children }) => {
   const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`;
 
   return (
-    <section>
+    <section className="h-full">
       <Navigation fullName={fullName} />
       {children}
     </section>

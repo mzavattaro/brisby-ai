@@ -18,7 +18,7 @@ const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
   <ClerkProvider>
     <html className="h-full bg-white" lang="en">
       <Toaster position="bottom-center" richColors closeButton />
-      <body className={inter.className}>
+      <body className={(inter.className, 'h-full')}>
         {children}
         <Analytics />
       </body>

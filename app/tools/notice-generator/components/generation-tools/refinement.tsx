@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import RangerSlider from '@/components/rangeSlider';
+import { Slider } from '@/components/ui/slider';
 import type { FC } from 'react';
 
 const Refinement: FC = () => {
@@ -19,6 +20,7 @@ const Refinement: FC = () => {
         rangeValue={rangeValue}
         setRangeValue={setRangeValue}
       />
+      <Slider defaultValue={[33]} max={100} step={1} />
     </>
   );
 };

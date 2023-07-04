@@ -4,7 +4,7 @@ import type { Dispatch, FC, SetStateAction } from 'react';
 
 export type BubbleColorMenuItem = {
   name: string;
-  color: string | null;
+  color: string;
 };
 
 type ColorSelectorProps = {
@@ -13,7 +13,7 @@ type ColorSelectorProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-const TEXT_COLORS: BubbleColorMenuItem[] = [
+const textColors: BubbleColorMenuItem[] = [
   {
     name: 'Default',
     color: '#000000',
@@ -52,7 +52,7 @@ const TEXT_COLORS: BubbleColorMenuItem[] = [
   },
 ];
 
-const HIGHLIGHT_COLORS: BubbleColorMenuItem[] = [
+const highlightColors: BubbleColorMenuItem[] = [
   {
     name: 'Default',
     color: '#ffffff',
@@ -96,11 +96,11 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
   isOpen,
   setIsOpen,
 }) => {
-  const activeColorItem = TEXT_COLORS.find(({ color }) =>
+  const activeColorItem = textColors.find(({ color }) =>
     editor.isActive('textStyle', { color })
   );
 
-  const activeHighlightItem = HIGHLIGHT_COLORS.find(({ color }) =>
+  const activeHighlightItem = highlightColors.find(({ color }) =>
     editor.isActive('highlight', { color })
   );
 
@@ -127,14 +127,15 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
       {isOpen ? (
         <section className="fixed top-full z-[99999] mt-1 flex w-48 flex-col overflow-hidden rounded border border-stone-200 bg-white p-1 shadow-xl animate-in fade-in slide-in-from-top-1">
           <div className="my-1 px-2 text-sm text-stone-500">Color</div>
-          {TEXT_COLORS.map(({ name, color }, index) => (
+          {textColors.map(({ name, color }, index) => (
             <button
               type="button"
               key={index}
               onClick={() => {
                 editor.commands.unsetColor();
-                name !== 'Default' &&
+                if (name !== 'Default') {
                   editor.chain().focus().setColor(color).run();
+                }
                 setIsOpen(false);
               }}
               className="flex items-center justify-between rounded-sm px-2 py-1 text-sm text-stone-600 hover:bg-stone-100"
@@ -158,13 +159,15 @@ export const ColorSelector: FC<ColorSelectorProps> = ({
             Background
           </div>
 
-          {HIGHLIGHT_COLORS.map(({ name, color }, index) => (
+          {highlightColors.map(({ name, color }, index) => (
             <button
               type="button"
               key={index}
               onClick={() => {
                 editor.commands.unsetHighlight();
-                name !== 'Default' && editor.commands.setHighlight({ color });
+                if (name !== 'Default') {
+                  editor.commands.setHighlight({ color });
+                }
                 setIsOpen(false);
               }}
               className="flex items-center justify-between rounded-sm px-2 py-1 text-sm text-stone-600 hover:bg-stone-100"

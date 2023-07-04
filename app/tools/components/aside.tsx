@@ -9,7 +9,7 @@ type AsideProps = {
 const Aside: FC<AsideProps> = ({ children, className }) => (
   <aside
     className={clsx(
-      'fixed bg-slate-50 inset-y-0 right-0 hidden w-96 overflow-y-auto border-l border-gray-200 py-6 xl:block',
+      'fixed inset-y-0 right-0 hidden w-96 overflow-y-auto border-l border-gray-200 py-6 xl:block',
       className
     )}
   >

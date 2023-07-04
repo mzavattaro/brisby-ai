@@ -1,4 +1,7 @@
 import { clsx } from '@/lib/clsx';
+import Refinement from './refinement';
+import History from './history';
+import Metadata from './metadata';
 import type { FC } from 'react';
 
 type SidebarTabsProps = {

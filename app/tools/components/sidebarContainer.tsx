@@ -1,22 +1,32 @@
-'use client';
-
-import { useState } from 'react';
-import GenerationTools from '../notice-generator/components/generation-tools/generationTools';
-import SidebarTabs from './sidebarTabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Refinement from '../notice-generator/components/generation-tools/refinement';
+import History from '../notice-generator/components/generation-tools/history';
+import Metadata from '../notice-generator/components/generation-tools/metadata';
 import type { FC } from 'react';
 
 const SidebarContainer: FC = () => {
-  const [currentTab, setCurrentTab] = useState('Refinement');
+  const tabs = [
+    { name: 'Refinement', component: <Refinement /> },
+    { name: 'History', component: <History /> },
+    { name: 'Metadata', component: <Metadata /> },
+  ];
 
   return (
     <div className="w-full h-full">
-      <div className="px-3">
-        <SidebarTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      </div>
-
-      <div className="px-6 pt-6">
-        <GenerationTools currentTab={currentTab} />
-      </div>
+      <Tabs defaultValue="Refinement" className="w-full px-8">
+        <TabsList className="w-full">
+          {tabs.map((tab) => (
+            <TabsTrigger className="w-full" key={tab.name} value={tab.name}>
+              {tab.name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {tabs.map((tab) => (
+          <TabsContent key={tab.name} value={tab.name}>
+            {tab.component}
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   );
 };

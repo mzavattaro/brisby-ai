@@ -257,7 +257,7 @@ const CommandList = ({
 
   const { complete, isLoading } = useCompletion({
     id: 'novel',
-    api: '/api/generate',
+    api: '/api/openai',
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error('You have reached your request limit for the day.');

@@ -1,5 +1,6 @@
 import React from 'react';
 import './globals.css';
+import '@/styles/prosemirror.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Inter as createInter } from 'next/font/google';
 import Toaster from './toaster';

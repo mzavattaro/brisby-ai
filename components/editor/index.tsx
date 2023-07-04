@@ -5,18 +5,18 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import { useDebouncedCallback } from 'use-debounce';
 import { useCompletion } from 'ai/react';
 import { toast } from 'sonner';
-import va from '@vercel/analytics';
+// import va from '@vercel/analytics';
 import useLocalStorage from '@/lib/hooks/use-local-storage';
 import { TiptapExtensions } from './extensions';
 import { TiptapEditorProps } from './props';
-import DEFAULT_EDITOR_CONTENT from './default-content';
+import defaultEditorContent from './default-content';
 import { EditorBubbleMenu } from './components';
 import type { FC } from 'react';
 
 const Editor: FC = () => {
   const [content, setContent] = useLocalStorage(
     'content',
-    DEFAULT_EDITOR_CONTENT
+    defaultEditorContent
   );
   const [saveStatus, setSaveStatus] = useState('Saved');
 
@@ -51,25 +51,32 @@ const Editor: FC = () => {
         });
         // we're using this for now until we can figure out a way to stream markdown text with proper formatting: https://github.com/steven-tey/novel/discussions/7
         await complete(event.editor.getText());
-        // complete(event.editor.storage.markdown.getMarkdown());
-        va.track('Autocomplete Shortcut Used');
+        /*
+         * complete(event.editor.storage.markdown.getMarkdown());
+         * va.track('Autocomplete Shortcut Used');
+         */
       } else {
-        debouncedUpdates(event);
+        await debouncedUpdates(event);
       }
     },
     autofocus: 'end',
   });
 
-  const { complete, completion, isLoading, stop } = useCompletion({
+  const {
+    complete,
+    completion: aiCompletion,
+    isLoading,
+    stop,
+  } = useCompletion({
     id: 'novel',
     api: '/api/openai',
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error('You have reached your request limit for the day.');
-        va.track('Rate Limit Reached');
+        // va.track('Rate Limit Reached');
       }
     },
-    onFinish: (_prompt, completion) => {
+    onFinish: (prompt, completion) => {
       editor?.commands.setTextSelection({
         from: editor.state.selection.from - completion.length,
         to: editor.state.selection.from,
@@ -84,10 +91,10 @@ const Editor: FC = () => {
 
   // Insert chunks of the generated text
   useEffect(() => {
-    const diff = completion.slice(prev.current.length);
-    prev.current = completion;
+    const diff = aiCompletion.slice(prev.current.length);
+    prev.current = aiCompletion;
     editor?.commands.insertContent(diff);
-  }, [isLoading, editor, completion]);
+  }, [isLoading, editor, aiCompletion]);
 
   useEffect(() => {
     /*
@@ -99,7 +106,7 @@ const Editor: FC = () => {
         stop();
         if (event.key === 'Escape') {
           editor?.commands.deleteRange({
-            from: editor.state.selection.from - completion.length,
+            from: editor.state.selection.from - aiCompletion.length,
             to: editor.state.selection.from,
           });
         }
@@ -107,12 +114,21 @@ const Editor: FC = () => {
       }
     };
 
-    const mousedownHandler = async (event: MouseEvent) => {
+    const mousedownHandler = (event: MouseEvent) => {
       event.preventDefault();
       event.stopPropagation();
       stop();
-      if (window.confirm('AI writing paused. Continue?')) {
-        await complete(editor?.getText() ?? '');
+      if (
+        toast('BrisbyAI writing paused. Continue?', {
+          action: {
+            label: 'Yes',
+            onClick: async () => complete(editor?.getText() ?? ''),
+          },
+          duration: Infinity,
+        })
+      ) {
+        // va.track('User Paused AI');
+        console.log('User wants to continue');
       }
     };
 
@@ -127,17 +143,18 @@ const Editor: FC = () => {
       document.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('mousedown', mousedownHandler);
     };
-  }, [stop, isLoading, editor, complete, completion.length]);
+  }, [stop, isLoading, editor, complete, aiCompletion.length]);
 
   // Hydrate the editor with the content from localStorage.
   useEffect(() => {
-    if (editor && content && !hydrated) {
+    if (editor && !hydrated) {
       editor.commands.setContent(content);
       setHydrated(true);
     }
   }, [editor, content, hydrated]);
 
   return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       onClick={() => {
         editor?.chain().focus().run();

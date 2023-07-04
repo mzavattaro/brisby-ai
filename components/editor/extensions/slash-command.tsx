@@ -6,7 +6,7 @@ import React, {
   useLayoutEffect,
 } from 'react';
 import { Extension } from '@tiptap/core';
-import Suggestion from '@tiptap/suggestion';
+import suggestion from '@tiptap/suggestion';
 import { ReactRenderer } from '@tiptap/react';
 import { useCompletion } from 'ai/react';
 import tippy from 'tippy.js';
@@ -19,7 +19,6 @@ import {
   MessageSquarePlus,
   Text,
   TextQuote,
-  Code,
   CheckSquare,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -63,7 +62,7 @@ const Command = Extension.create({
   },
   addProseMirrorPlugins() {
     return [
-      Suggestion({
+      suggestion({
         editor: this.editor,
         ...this.options.suggestion,
       }),
@@ -185,14 +184,16 @@ const getSuggestionItems = ({ query }: { query: string }) =>
           .toggleBlockquote()
           .run(),
     },
-    {
-      title: 'Code',
-      description: 'Capture a code snippet.',
-      searchTerms: ['codeblock'],
-      icon: <Code size={18} />,
-      command: ({ editor, range }: CommandProps) =>
-        editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
-    },
+    /*
+     * {
+     *   title: 'Code',
+     *   description: 'Capture a code snippet.',
+     *   searchTerms: ['codeblock'],
+     *   icon: <Code size={18} />,
+     *   command: ({ editor, range }: CommandProps) =>
+     *     editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
+     * },
+     */
     /*
      * {
      *   title: 'Image',
@@ -221,8 +222,7 @@ const getSuggestionItems = ({ query }: { query: string }) =>
       return (
         item.title.toLowerCase().includes(search) ||
         item.description.toLowerCase().includes(search) ||
-        (item.searchTerms &&
-          item.searchTerms.some((term: string) => term.includes(search)))
+        item.searchTerms?.some((term: string) => term.includes(search))
       );
     }
     return true;
@@ -261,12 +261,13 @@ const CommandList = ({
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error('You have reached your request limit for the day.');
-        va.track('Rate Limit Reached');
+        console.log("You've reached your request limit for the day.");
+        // va.track('Rate Limit Reached');
         return;
       }
       editor.chain().focus().deleteRange(range).run();
     },
-    onFinish: (_prompt, completion) => {
+    onFinish: (prompt, completion) => {
       // highlight the generated text
       editor.commands.setTextSelection({
         from: range.from,
@@ -284,14 +285,13 @@ const CommandList = ({
       va.track('Slash Command Used', {
         command: item.title,
       });
-      if (item) {
-        if (item.title === 'Continue writing') {
-          // we're using this for now until we can figure out a way to stream markdown text with proper formatting: https://github.com/steven-tey/novel/discussions/7
-          complete(editor.getText());
-          // complete(editor.storage.markdown.getMarkdown());
-        } else {
-          command(item);
-        }
+
+      if (item.title === 'Continue writing') {
+        // we're using this for now until we can figure out a way to stream markdown text with proper formatting: https://github.com/steven-tey/novel/discussions/7
+        complete(editor.getText());
+        // complete(editor.storage.markdown.getMarkdown());
+      } else {
+        command(item);
       }
     },
     [complete, command, editor, items]
@@ -299,18 +299,18 @@ const CommandList = ({
 
   useEffect(() => {
     const navigationKeys = ['ArrowUp', 'ArrowDown', 'Enter'];
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (navigationKeys.includes(e.key)) {
-        e.preventDefault();
-        if (e.key === 'ArrowUp') {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (navigationKeys.includes(event.key)) {
+        event.preventDefault();
+        if (event.key === 'ArrowUp') {
           setSelectedIndex((selectedIndex + items.length - 1) % items.length);
           return true;
         }
-        if (e.key === 'ArrowDown') {
+        if (event.key === 'ArrowDown') {
           setSelectedIndex((selectedIndex + 1) % items.length);
           return true;
         }
-        if (e.key === 'Enter') {
+        if (event.key === 'Enter') {
           selectItem(selectedIndex);
           return true;
         }
@@ -334,7 +334,7 @@ const CommandList = ({
 
     const item = container?.children[selectedIndex] as HTMLElement;
 
-    if (item && container) updateScrollView(container, item);
+    if (container) updateScrollView(container, item);
   }, [selectedIndex]);
 
   return items.length > 0 ? (

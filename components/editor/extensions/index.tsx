@@ -56,6 +56,7 @@ export const TiptapExtensions = [
     },
     gapcursor: false,
   }),
+
   // patch to fix horizontal rule bug: https://github.com/ueberdosis/tiptap/pull/3859#issuecomment-1536799740
   HorizontalRule.extend({
     addInputRules() {
@@ -82,45 +83,53 @@ export const TiptapExtensions = [
       class: 'mt-4 mb-6 border-t border-stone-300',
     },
   }),
+
   TiptapLink.configure({
     HTMLAttributes: {
       class:
         'text-stone-400 underline underline-offset-[3px] hover:text-stone-600 transition-colors cursor-pointer',
     },
   }),
+
   TiptapImage.configure({
     allowBase64: true,
     HTMLAttributes: {
       class: 'rounded-lg border border-stone-200',
     },
   }),
+
   Placeholder.configure({
     placeholder: ({ node }) => {
       if (node.type.name === 'heading') {
-        return `Heading ${nod.attrs.level}`;
+        return `Heading ${node.attrs.level}`;
       }
       return "Press '/' for commands, or '++' for AI autocomplete...";
     },
     includeChildren: true,
   }),
+
   SlashCommand,
   TiptapUnderline,
   TextStyle,
   Color,
+
   Highlight.configure({
     multicolor: true,
   }),
+
   TaskList.configure({
     HTMLAttributes: {
       class: 'not-prose pl-2',
     },
   }),
+
   TaskItem.configure({
     HTMLAttributes: {
       class: 'flex items-start my-4',
     },
     nested: true,
   }),
+
   Markdown.configure({
     linkify: true,
     transformCopiedText: true,

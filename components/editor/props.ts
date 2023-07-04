@@ -1,4 +1,4 @@
-import { handleImageUpload } from '@/lib/editor';
+// import { handleImageUpload } from '@/lib/editor';
 import type { EditorProps } from '@tiptap/pm/view';
 
 export const TiptapEditorProps: EditorProps = {
@@ -7,7 +7,7 @@ export const TiptapEditorProps: EditorProps = {
   },
 
   handleDOMEvents: {
-    keydown: (view, event: KeyboardEvent) => {
+    keydown: (_view, event: KeyboardEvent) => {
       // prevent default event listeners from firing when slash command is active
       if (['ArrowUp', 'ArrowDown', 'Enter'].includes(event.key)) {
         const slashCommand = document.querySelector('#slash-command');
